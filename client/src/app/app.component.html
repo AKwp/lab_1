@@ -1,0 +1,107 @@
+<form [formGroup]="dataForm">
+  <div class="form-group">
+    <div class="selects-container">
+      <div class="select-container">
+        <select class="form-control select" formControlName="segment" id="segment">
+          <option *ngFor="let segment of noDuplicatedSegment; let i = index" [value]="segment">
+            {{segment}}
+          </option>
+        </select>
+        <button class="btn btn-primary" (click)="getFileSegment($event)">Get segment</button>
+      </div>
+      <div class="select-container">
+        <select class="form-control select" formControlName="country" id="country">
+          <option *ngFor="let country of noDuplicatedCountry; let i = index" [value]="country">
+            {{country}}
+          </option>
+        </select>
+        <button class="btn btn-primary" (click)="getFileCountry($event)">Get country</button>
+      </div>
+      <div class="select-container">
+        <select class="form-control select" formControlName="product" id="product">
+          <option *ngFor="let product of noDuplicatedProduct; let i = index" [value]="product">
+            {{product}}
+          </option>
+        </select>
+        <button class="btn btn-primary" (click)="getFileProduct($event)">Get product</button>
+      </div>
+    </div>
+    <div class="totalUnit">
+      <div class="select-container">
+        <select class="form-control select" formControlName="countryUnit" id="countryUnit">
+          <option *ngFor="let country of noDuplicatedCountry; let i = index" [value]="country">
+            {{country}}
+          </option>
+        </select>
+      </div>
+      <div class="select-container">
+        <select class="form-control select" formControlName="segmentUnit" id="segmentUnit">
+          <option *ngFor="let segment of noDuplicatedSegment; let i = index" [value]="segment">
+            {{segment}}
+          </option>
+        </select>
+      </div>
+      <button class="btn btn-primary" (click)="getTotalUnitSum($event)">Get total unit sold value</button>
+      <p *ngIf="showInvalidUnit" class="reqi">Choose both required values</p>
+      <p *ngIf="isTotalSum">For {{ totalUnitSum.segment }} segment in {{ totalUnitSum.country }} the total sum of unit sold is equal to {{ totalUnitSum.sum }}</p>
+    </div>
+    <div class="add-container">
+      <h2>Add new item</h2>
+      <div class="add-segment">
+        <div>
+          <label for="segmentAdd">Segment: : </label>
+          <input class="form-control" id="segmentAdd" type="text" formControlName="newSegment" required>
+        </div>
+        <div>
+          <label for="countryAdd">Country: </label>
+          <input class="form-control" id="countryAdd" type="text" formControlName="newCountry" required>
+        </div>
+      </div>
+      <div class="add-segment">
+        <div>
+          <label for="productAdd">First Name: </label>
+          <input class="form-control" id="productAdd" type="text" formControlName="newProduct" required>
+        </div>
+        <div>
+          <label for="unitSoldAdd">Last Name: </label>
+          <input class="form-control" id="unitSoldAdd" type="text" formControlName="newUnitSold" required>
+        </div>
+      </div>
+      <p *ngIf="showInvalid">Insert all required data</p>
+      <button class="btn btn-primary" (click)="addNewData($event)">Add new</button>
+    </div>
+    <div class="search">
+      <input class="form-control" id="searchValue" type="text" formControlName="searchData" placeholder="Search">
+      <button class="btn btn-primary" (click)="onSearch($event)">Search</button>
+    </div>
+  </div>
+</form>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">N.</th>
+    <th scope="col">Segment</th>
+    <th scope="col">Product</th>
+    <th scope="col">Country</th>
+    <th scope="col">Unit sold</th>
+    <th scope="col">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of dataContent | paginate: {id: 'listing_pagination',
+itemsPerPage: 10,
+currentPage: page,
+totalItems: totalRecords}, let i = index" [attr.data-index]="i">
+    <td>{{ data['id']}}</td>
+    <td>{{ data['segment']}}</td>
+    <td>{{ data['product']}}</td>
+    <td>{{ data['country']}}</td>
+    <td>{{ data['unitSold']}}</td>
+    <td><button class="btn btn-danger" (click)="onRemove($event, data['id'])">X</button></td>
+  </tr>
+  </tbody>
+</table>
+<div>
+  <pagination-controls id="listing_pagination" (pageChange)="page = $event"></pagination-controls>
+</div>
